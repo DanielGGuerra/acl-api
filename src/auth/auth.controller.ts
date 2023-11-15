@@ -13,12 +13,14 @@ import {
 import { UnauthorizedErrorSchema } from 'src/errors/schemas/unauthorized';
 import { AccessUserDto } from './dtos/access-user.dto';
 import User from 'src/user/entities/user.entity';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 @ApiTags('Autorização')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('signin')
   @Public()
   @NotRequiredPermission()

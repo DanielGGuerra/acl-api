@@ -6,9 +6,18 @@ import { ModuleModule } from './module/module.module';
 import { PermissionPolicyModule } from './permission-policy/permission-policy.module';
 import { PermissionGroupModule } from './permission-group/permission-group.module';
 import { TestPermissionModule } from './test-permission/test-permission.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     DatabaseModule,
     UserModule,
     AuthModule,
@@ -18,6 +27,11 @@ import { TestPermissionModule } from './test-permission/test-permission.module';
     TestPermissionModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

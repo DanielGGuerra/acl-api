@@ -39,7 +39,6 @@ export class TestPermissionController {
   @Post()
   @RequiredPermission({ controller: PREFIX_CONTROLLER, action: Action.create })
   create(@Body() createTestPermissionDto: CreateTestPermissionDto) {
-    console.log(createTestPermissionDto);
     return this.testPermissionService.create(createTestPermissionDto);
   }
 
