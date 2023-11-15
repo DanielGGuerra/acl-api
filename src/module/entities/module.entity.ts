@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import PermissionPolicy from 'src/permission-policy/entities/permission-policy.entity';
 import {
   Column,
@@ -10,9 +11,11 @@ import {
 
 @Entity()
 export default class Module {
+  @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ApiProperty()
   @Column({ type: 'varchar', length: 100, nullable: false })
   nameController: string;
 
@@ -22,9 +25,11 @@ export default class Module {
   )
   permissionPolicy: PermissionPolicy[];
 
+  @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;
 
+  @ApiProperty()
   @UpdateDateColumn()
   updatedAt: Date;
 }

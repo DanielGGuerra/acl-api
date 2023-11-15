@@ -3,18 +3,34 @@ import { AuthService } from './auth.service';
 import SingInDto from './dtos/sign-in.dto';
 import { Public } from 'src/common/decorator/public-route.decorator';
 import { NotRequiredPermission } from 'src/common/decorator/permission-roles.decorator';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiSecurity,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { UnauthorizedErrorSchema } from 'src/errors/schemas/unauthorized';
+import { AccessUserDto } from './dtos/access-user.dto';
+import User from 'src/user/entities/user.entity';
 
 @Controller('auth')
+@ApiTags('Autorização')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('signin')
   @Public()
   @NotRequiredPermission()
-  @Post('signin')
+  @ApiBody({ type: SingInDto })
+  @ApiOkResponse({ type: AccessUserDto })
   signIn(@Body() signIn: SingInDto) {
     return this.authService.signIn(signIn.login, signIn.password);
   }
 
+  @ApiSecurity('Authorization')
+  @ApiOkResponse({ type: User })
+  @ApiUnauthorizedResponse({ type: UnauthorizedErrorSchema })
   @NotRequiredPermission()
   @Get('profile')
   getProfile(@Req() request) {

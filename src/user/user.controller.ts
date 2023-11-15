@@ -17,8 +17,10 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiCreatedResponse,
   ApiForbiddenResponse,
-  ApiResponse,
+  ApiOkResponse,
+  ApiParam,
   ApiSecurity,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -41,31 +43,51 @@ export class UserController {
 
   @Post()
   @ApiBody({ type: CreateUserDto })
-  @ApiResponse({ status: 201, type: User })
+  @ApiCreatedResponse({ type: User })
   @RequiredPermission({ action: Action.create, controller: PREFIX_CONTROLLER })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @ApiOkResponse({ type: [User] })
   @RequiredPermission({ action: Action.read, controller: PREFIX_CONTROLLER })
   findAll() {
     return this.userService.findAll();
   }
 
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'ID do usuário',
+    example: '33b5059f-d90a-4803-ad35-ee3ff507e2f1',
+  })
+  @ApiOkResponse({ type: User })
   @RequiredPermission({ action: Action.read, controller: PREFIX_CONTROLLER })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiBody({ type: CreateUserDto })
+  @ApiParam({
+    name: 'id',
+    description: 'ID do usuário',
+    example: '33b5059f-d90a-4803-ad35-ee3ff507e2f1',
+  })
+  @ApiOkResponse({ type: User })
   @RequiredPermission({ action: Action.update, controller: PREFIX_CONTROLLER })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'ID do usuário',
+    example: '33b5059f-d90a-4803-ad35-ee3ff507e2f1',
+  })
+  @ApiOkResponse({ type: User })
   @RequiredPermission({ action: Action.delete, controller: PREFIX_CONTROLLER })
   remove(@Param('id') id: string) {
     return this.userService.remove(id);

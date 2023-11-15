@@ -14,10 +14,25 @@ import {
   Action,
   RequiredPermission,
 } from 'src/common/decorator/permission-roles.decorator';
+import {
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiSecurity,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { ForbiddenErrorSchema } from 'src/errors/schemas/forbidden';
+import { BadRequestErrorSchema } from 'src/errors/schemas/bad-request';
+import { UnauthorizedErrorSchema } from 'src/errors/schemas/unauthorized';
 
 const PREFIX_CONTROLLER = 'test-permission';
 
 @Controller(PREFIX_CONTROLLER)
+@ApiTags('Modulo para testar permissões do usuário')
+@ApiSecurity('Authorization')
+@ApiForbiddenResponse({ type: ForbiddenErrorSchema })
+@ApiBadRequestResponse({ type: BadRequestErrorSchema })
+@ApiUnauthorizedResponse({ type: UnauthorizedErrorSchema })
 export class TestPermissionController {
   constructor(private readonly testPermissionService: TestPermissionService) {}
 
