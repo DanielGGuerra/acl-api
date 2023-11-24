@@ -1,6 +1,6 @@
 ## Descrição
 
-Um projeto simples de autenticação e controle de acesso contruido em Nest.js.
+Um projeto simples de autenticação e controle de acesso construído em Nest.js.
 
 ![Modelo do Banco](modelagem.png)
 
